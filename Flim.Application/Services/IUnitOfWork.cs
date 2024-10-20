@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flim.Domain.Interfaces
+namespace Flim.Application.Services
 {
     public interface IUnitOfWork : IDisposable
     {

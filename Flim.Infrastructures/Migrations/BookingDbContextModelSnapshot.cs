@@ -48,7 +48,7 @@ namespace Flim.Infrastructures.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.BookingSeat", b =>
@@ -63,7 +63,7 @@ namespace Flim.Infrastructures.Migrations
 
                     b.HasIndex("SeatId");
 
-                    b.ToTable("BookingSeat");
+                    b.ToTable("BookingSeat", (string)null);
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Film", b =>
@@ -91,7 +91,7 @@ namespace Flim.Infrastructures.Migrations
 
                     b.HasKey("FilmId");
 
-                    b.ToTable("Films");
+                    b.ToTable("Films", (string)null);
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Seat", b =>
@@ -119,7 +119,7 @@ namespace Flim.Infrastructures.Migrations
 
                     b.HasIndex("ShowtimeId");
 
-                    b.ToTable("Seats");
+                    b.ToTable("Seats", (string)null);
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Showtime", b =>
@@ -140,7 +140,7 @@ namespace Flim.Infrastructures.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("Showtimes");
+                    b.ToTable("Showtimes", (string)null);
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.User", b =>
@@ -169,7 +169,7 @@ namespace Flim.Infrastructures.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Booking", b =>

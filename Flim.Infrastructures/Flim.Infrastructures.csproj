@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,10 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Flim.Application\Flim.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Repositories\NewFolder\" />
   </ItemGroup>
 
 </Project>

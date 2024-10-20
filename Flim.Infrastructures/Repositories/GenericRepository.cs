@@ -1,5 +1,6 @@
-﻿using Flim.Domain.Interfaces;
+﻿using Flim.Application.Services;
 using Flim.Infrastructures.Data;
+using Flim.Infrastructures.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,11 @@ namespace Flim.Infrastructures.Repositories
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task<T> FindSingleAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.SingleOrDefaultAsync(predicate);
         }
     }
 

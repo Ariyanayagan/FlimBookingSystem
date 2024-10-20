@@ -1,4 +1,5 @@
 using Flim.Infrastructures.Data;
+using Flim.Infrastructures.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -13,7 +14,9 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("PostgresConnection");
 
-builder.Services.AddDbContext<BookingDbContext>(option=>option.UseNpgsql(connectionString));    
+builder.Services.AddDbContext<BookingDbContext>(option=>option.UseNpgsql(connectionString));
+
+builder.Services.AddInfrastructures();
 
 var app = builder.Build();
 

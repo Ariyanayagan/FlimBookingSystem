@@ -21,7 +21,20 @@ namespace Flim.Infrastructures.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            // Fluent API configurations (e.g., for relationships and constraints)
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.UserId)
+                      .ValueGeneratedOnAdd() // Ensures auto-increment.
+                      .IsRequired();
+            });
+
+            modelBuilder.Entity<Booking>()
+                        .HasOne(b => b.User)
+                        .WithMany(u => u.Bookings)
+                        .HasForeignKey(b => b.UserId);
+
 
             modelBuilder.Entity<Showtime>()
                 .HasOne(s => s.Film)
