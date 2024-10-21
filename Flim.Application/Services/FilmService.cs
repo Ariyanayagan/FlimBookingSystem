@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Flim.Domain.Entities;
 
 namespace Flim.Application.Services
 {
@@ -31,7 +32,7 @@ namespace Flim.Application.Services
             };
 
             _unitOfWork.BeginTransaction();
-             await _unitOfWork.Repository<Flim.Domain.Entities.Film>().InsertAsync(flim);
+            await _unitOfWork.Repository<Film>().InsertAsync(flim);
             _unitOfWork.CommitTransaction();
             var result = await _unitOfWork.SaveAsync();
 
@@ -41,7 +42,12 @@ namespace Flim.Application.Services
 
         public async Task<FilmDTO> GetFilmByIdAsync(int id)
         {
-            var flim = await _unitOfWork.Repository<Flim.Domain.Entities.Film>().GetByIdAsync(id);
+            var flim = await _unitOfWork.Repository<Film>().GetByIdAsync(id);
+
+            if (flim is null)
+            {
+                return null;
+            }
 
             return new FilmDTO
             {
@@ -50,6 +56,15 @@ namespace Flim.Application.Services
                 Duration = flim.Duration,
                 Genre = flim.Genre,
             };
+
+        }
+
+        public async Task<IEnumerable<Film>> GetFilmByNameAsync(string name)
+        {
+            var flim = await _unitOfWork.Repository<Film>().FindAsync(flim => flim.Name == name);
+
+            return flim;
+
 
         }
     }

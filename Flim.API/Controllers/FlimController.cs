@@ -4,6 +4,8 @@ using Flim.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Flim.Domain.Entities;
+
 
 namespace Flim.API.Controllers
 {
@@ -30,6 +32,24 @@ namespace Flim.API.Controllers
 
             return Ok(ApiResponse<int>.Success(flim,statusCode:(int)HttpStatusCode.Created));    
 
+        }
+
+        [HttpGet("film")]
+        public async Task<IActionResult> GetFlimByName([FromQuery] string name)
+        {
+            var flims = await _filmService.GetFilmByNameAsync(name);
+            return Ok(ApiResponse<IEnumerable<Film>>.Success(flims,statusCode:(int)HttpStatusCode.OK));
+        }
+        [HttpGet("film/{id}")]
+        public async Task<IActionResult> GetFlimById([FromRoute] int id)
+        {
+            var film = await _filmService.GetFilmByIdAsync(id);
+
+            if(film is null)
+            {
+                return BadRequest(ApiResponse<string>.Failure($"Flim Not Found for this Id : {id}", statusCode: (int)HttpStatusCode.NotFound));
+            }
+            return Ok(ApiResponse<FilmDTO>.Success(film, statusCode: (int)HttpStatusCode.OK));
         }
 
     }
