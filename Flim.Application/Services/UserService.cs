@@ -1,5 +1,7 @@
 ﻿using BCrypt.Net;
+using Flim.Application.Interfaces;
 using Flim.Domain.Entities;
+using Flim.Domain.Shared;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +15,7 @@ namespace Flim.Application.Services
     {
         private readonly IGenericRepository<User> _userRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+      
         public UserService(IGenericRepository<User> userRepository, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;

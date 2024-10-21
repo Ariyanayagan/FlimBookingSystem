@@ -1,4 +1,6 @@
-﻿using Flim.Application.Services;
+﻿using Flim.Application.Interfaces;
+using Flim.Application.Services;
+using Flim.Domain.Shared;
 using Flim.Infrastructures.Interfaces;
 using Flim.Infrastructures.Repositories;
 using Flim.Infrastructures.Services;

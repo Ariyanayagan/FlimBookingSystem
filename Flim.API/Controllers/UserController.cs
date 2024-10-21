@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Flim.Domain.Entities;
 using BCrypt.Net;
-using Flim.Application.Services;
+using Flim.Application.Interfaces;
 
 namespace Flim.API.Controllers
 {

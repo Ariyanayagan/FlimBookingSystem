@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flim.Application.Services
+namespace Flim.Domain.Shared
 {
     public interface IGenericRepository<T> where T : class
     {

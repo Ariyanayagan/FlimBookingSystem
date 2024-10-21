@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flim.Application.Services
+namespace Flim.Application.Interfaces
 {
     public interface IUserService
     {
