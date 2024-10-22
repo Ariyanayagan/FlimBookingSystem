@@ -13,10 +13,11 @@ namespace Flim.Infrastructures.Data
         public BookingDbContext(DbContextOptions<BookingDbContext> options) : base(options) { }
 
         public DbSet<Film> Films { get; set; }
-        public DbSet<Showtime> Showtimes { get; set; }
+        //public DbSet<Showtime> Showtimes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Slot> Slots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,20 +37,36 @@ namespace Flim.Infrastructures.Data
                         .HasForeignKey(b => b.UserId);
 
 
-            modelBuilder.Entity<Showtime>()
+            //modelBuilder.Entity<Showtime>()
+            //    .HasOne(s => s.Film)
+            //    .WithMany(f => f.Showtimes)
+            //    .HasForeignKey(s => s.FilmId);
+
+            modelBuilder.Entity<Slot>()
                 .HasOne(s => s.Film)
-                .WithMany(f => f.Showtimes)
+                .WithMany(f => f.Slots) // Updated to Slots
                 .HasForeignKey(s => s.FilmId);
 
+            //modelBuilder.Entity<Booking>()
+            //    .HasOne(b => b.Showtime)
+            //    .WithMany(s => s.Bookings)
+            //    .HasForeignKey(b => b.ShowtimeId);
+
             modelBuilder.Entity<Booking>()
-                .HasOne(b => b.Showtime)
-                .WithMany(s => s.Bookings)
-                .HasForeignKey(b => b.ShowtimeId);
+               .HasOne(b => b.Slot) // Updated to Slot
+               .WithMany(s => s.Bookings)
+               .HasForeignKey(b => b.SlotId);
+
+            //modelBuilder.Entity<Seat>()
+            //    .HasOne(s => s.Showtime)
+            //    .WithMany(st => st.Seats)
+            //    .HasForeignKey(s => s.ShowtimeId);
 
             modelBuilder.Entity<Seat>()
-                .HasOne(s => s.Showtime)
-                .WithMany(st => st.Seats)
-                .HasForeignKey(s => s.ShowtimeId);
+               .HasOne(s => s.Slot) // Updated to Slot
+               .WithMany(st => st.Seats)
+               .HasForeignKey(s => s.SlotId);
+
 
             modelBuilder.Entity<BookingSeat>()
                 .HasKey(bs => new { bs.BookingId, bs.SeatId });

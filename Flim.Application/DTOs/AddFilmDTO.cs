@@ -4,18 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flim.Domain.Entities
+namespace Flim.Application.DTOs
 {
-    public class Film
+    public class AddFilmDTO
     {
-        public int FilmId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Duration { get; set; } // in minutes
         public string Genre { get; set; }
-
-       //public ICollection<Showtime> Showtimes { get; set; }
-
-        public ICollection<Slot> Slots { get; set; }
     }
 }

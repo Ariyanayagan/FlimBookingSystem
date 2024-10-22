@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,6 +17,8 @@ namespace Flim.Domain.Shared
         Task DeleteAsync(object id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task<T> FindSingleAsync(Expression<Func<T, bool>> predicate);
+
+        Task<IEnumerable<T>> GetAllAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
     }
 }

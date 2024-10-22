@@ -1,4 +1,5 @@
 ﻿using Flim.Application.Services;
+using Flim.Domain.Interfaces;
 using Flim.Domain.Shared;
 using Flim.Infrastructures.Data;
 using Flim.Infrastructures.Interfaces;
@@ -19,12 +20,22 @@ namespace Flim.Infrastructures.Repositories
         private bool _disposed;
         private IDbContextTransaction _transaction;
         private readonly IServiceProvider _serviceProvider;
+        private ISeatRepository _seatRepository;
 
         public UnitOfWork(BookingDbContext context, IServiceProvider serviceProvider)
         {
             _context = context;
             _serviceProvider = serviceProvider;
         }
+
+        public ISeatRepository SeatRepository
+        {
+            get
+            {
+                return _seatRepository ??= _serviceProvider.GetService<ISeatRepository>();
+            }
+        }
+
 
         public IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class
         {
@@ -36,25 +47,34 @@ namespace Flim.Infrastructures.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public void BeginTransaction()
+        public async Task BeginTransaction()
         {
-            _transaction = _context.Database.BeginTransaction();
+            _transaction = await _context.Database.BeginTransactionAsync();
         }
 
-        public void CommitTransaction()
+        public async Task CommitTransaction()
         {
-            _transaction?.Commit();
+            if (_transaction != null)
+            {
+                await _transaction.CommitAsync();
+                await DisposeTransactionAsync();
+            }
         }
 
-        public void RollbackTransaction()
+        public async Task RollbackTransaction()
         {
-            _transaction?.Rollback();
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync();
+                await DisposeTransactionAsync();
+            }
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed && disposing)
             {
+                _transaction?.Dispose();
                 _context.Dispose();
             }
             _disposed = true;
@@ -65,5 +85,16 @@ namespace Flim.Infrastructures.Repositories
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public async Task DisposeTransactionAsync()
+        {
+            if (_transaction != null)
+            {
+                await _transaction.DisposeAsync();
+                _transaction = null;
+            }
+        }
+
+
     }
 }

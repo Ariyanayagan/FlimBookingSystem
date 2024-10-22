@@ -3,6 +3,7 @@ using Flim.Domain.Shared;
 using Flim.Infrastructures.Data;
 using Flim.Infrastructures.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +13,26 @@ using System.Threading.Tasks;
 
 namespace Flim.Infrastructures.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public  class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly BookingDbContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected readonly BookingDbContext _context;
+        protected readonly DbSet<T> _dbSet;
 
         public GenericRepository(BookingDbContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();
+        }
+        public async Task<IEnumerable<T>> GetAllAsync(Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()

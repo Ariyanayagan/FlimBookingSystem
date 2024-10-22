@@ -18,6 +18,9 @@ namespace Flim.Domain.Entities
         public int ShowtimeId { get; set; }
         public Showtime Showtime { get; set; }
 
+        public int SlotId { get; set; }
+        public Slot Slot { get; set; } 
+
         public ICollection<BookingSeat> BookingSeats { get; set; }
     }
 }

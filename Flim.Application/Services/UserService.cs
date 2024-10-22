@@ -39,15 +39,15 @@ namespace Flim.Application.Services
         {
             try
             {
-                _unitOfWork.BeginTransaction();
+                await _unitOfWork.BeginTransaction();
                 await _userRepository.InsertAsync(user);
                 await _unitOfWork.SaveAsync();
-                _unitOfWork.CommitTransaction();
+                await _unitOfWork.CommitTransaction();
                 return true;
             }
             catch (Exception ex) {
 
-                _unitOfWork.RollbackTransaction();
+                await _unitOfWork.RollbackTransaction();
                 throw ex;
             }
             

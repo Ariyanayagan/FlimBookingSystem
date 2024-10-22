@@ -7,22 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Flim.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flim.Application.Services
 {
     public class FilmService : IFilmService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<Film> _filmRepository;
 
-        public FilmService(IUnitOfWork unitOfWork)
+        public FilmService(IUnitOfWork unitOfWork, IGenericRepository<Film> filmRepository)
         {
             _unitOfWork = unitOfWork;
+            _filmRepository = filmRepository;
         }
 
 
-        public async Task<int> CreateFilmAsync(FilmDTO filmDto)
+        public async Task<int> CreateFilmAsync(AddFilmDTO filmDto)
         {
-            var flim = new Flim.Domain.Entities.Film
+            var flim = new Film
             {
                 Name = filmDto.Name,
                 Description = filmDto.Description,
@@ -31,37 +34,38 @@ namespace Flim.Application.Services
 
             };
 
-            _unitOfWork.BeginTransaction();
-            await _unitOfWork.Repository<Film>().InsertAsync(flim);
-            _unitOfWork.CommitTransaction();
+            await _unitOfWork.BeginTransaction();
+            await _filmRepository.InsertAsync(flim);
             var result = await _unitOfWork.SaveAsync();
+            await _unitOfWork.CommitTransaction();
 
             return result;
 
         }
 
-        public async Task<FilmDTO> GetFilmByIdAsync(int id)
+        public async Task<IEnumerable<Film>> GetFilmAsync()
         {
-            var flim = await _unitOfWork.Repository<Film>().GetByIdAsync(id);
+            var films = await _filmRepository.GetAllAsync(include: film => film
+                .Include(f => f.Slots)
+                .ThenInclude(s => s.Seats)
+                );
 
-            if (flim is null)
-            {
-                return null;
-            }
+            return films;
+        }
 
-            return new FilmDTO
-            {
-                Name = flim.Name,
-                Description = flim.Description,
-                Duration = flim.Duration,
-                Genre = flim.Genre,
-            };
+        public async Task<Film> GetFilmByIdAsync(int id)
+        {
+            var flim = await _filmRepository.GetByIdAsync(id);
+            var slots = await  _unitOfWork.Repository<Slot>().FindAsync(s=>s.FilmId == id);
 
+            flim.Slots = slots.ToList();
+
+            return flim;
         }
 
         public async Task<IEnumerable<Film>> GetFilmByNameAsync(string name)
         {
-            var flim = await _unitOfWork.Repository<Film>().FindAsync(flim => flim.Name == name);
+            var flim = await _filmRepository.FindAsync(flim => flim.Name == name);
 
             return flim;
 

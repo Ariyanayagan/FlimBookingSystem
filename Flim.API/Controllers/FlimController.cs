@@ -5,11 +5,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Flim.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace Flim.API.Controllers
 {
-    [Route("api/admin")]
+    [Route("api/film")]
     [ApiController]
     public class FlimController : ControllerBase
     {
@@ -20,8 +24,8 @@ namespace Flim.API.Controllers
             _filmService = filmService;
         }
 
-        [HttpPost("film")]
-        public async Task<IActionResult> CreateFilm([FromBody] FilmDTO filmDto)
+        [HttpPost("add")]
+        public async Task<IActionResult> CreateFilm([FromBody] AddFilmDTO filmDto)
         {
             if (filmDto == null)
             {
@@ -34,13 +38,13 @@ namespace Flim.API.Controllers
 
         }
 
-        [HttpGet("film")]
+        [HttpGet("flim-name")]
         public async Task<IActionResult> GetFlimByName([FromQuery] string name)
         {
             var flims = await _filmService.GetFilmByNameAsync(name);
             return Ok(ApiResponse<IEnumerable<Film>>.Success(flims,statusCode:(int)HttpStatusCode.OK));
         }
-        [HttpGet("film/{id}")]
+        [HttpGet("film-id/{id}")]
         public async Task<IActionResult> GetFlimById([FromRoute] int id)
         {
             var film = await _filmService.GetFilmByIdAsync(id);
@@ -49,7 +53,55 @@ namespace Flim.API.Controllers
             {
                 return BadRequest(ApiResponse<string>.Failure($"Flim Not Found for this Id : {id}", statusCode: (int)HttpStatusCode.NotFound));
             }
-            return Ok(ApiResponse<FilmDTO>.Success(film, statusCode: (int)HttpStatusCode.OK));
+
+            var result = new FilmDTO
+            {
+                Name = film.Name,
+                Description = film.Description,
+                Duration = film.Duration,
+                Genre = film.Genre
+            };
+
+            return Ok(ApiResponse<FilmDTO>.Success(result, statusCode: (int)HttpStatusCode.OK));
+        }
+
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var films = await  _filmService.GetFilmAsync();
+
+
+            var filmDtos = films.Select(f => new FilmDTO
+            {
+                Description = f.Description,
+                Duration = f.Duration,
+                FilmId = f.FilmId,
+                Genre = f.Genre,
+                Name = f.Name,
+                Slots = f.Slots.Select(s => new Slots
+                {
+                    ShowCategory = s.ShowCategory,
+                    FilmId = s.FilmId,
+                    SlotDate = s.SlotDate,
+                    SlotId = s.SlotId,
+                    Seats = s.Seats.Select(st => new SeatsDTO
+                    {
+                        SlotId = st.SlotId,
+                        IsReserved = st.IsReserved,
+                        Number = st.Number,
+                        Row = st.Row,
+                        SeatId = st.SeatId
+                    }).ToList()
+
+
+                }).ToList()
+
+            });
+
+            return Ok(filmDtos);
+
+            
+            
         }
 
     }

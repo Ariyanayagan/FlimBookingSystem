@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Flim.Domain.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,13 @@ namespace Flim.Domain.Shared
 {
     public interface IUnitOfWork : IDisposable
     {
+        ISeatRepository SeatRepository { get; }
         IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class;
         Task<int> SaveAsync();
-        void BeginTransaction();
-        void CommitTransaction();
-        void RollbackTransaction();
+        Task BeginTransaction();
+        Task CommitTransaction();
+        Task RollbackTransaction();
+
+        Task DisposeTransactionAsync();
     }
 }

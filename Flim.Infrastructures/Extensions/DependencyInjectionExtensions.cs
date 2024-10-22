@@ -1,5 +1,6 @@
 ﻿using Flim.Application.Interfaces;
 using Flim.Application.Services;
+using Flim.Domain.Interfaces;
 using Flim.Domain.Shared;
 using Flim.Infrastructures.Interfaces;
 using Flim.Infrastructures.Repositories;
@@ -21,6 +22,7 @@ namespace Flim.Infrastructures.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ISeatRepository, SeatRepository>();
             return services;
         }
     }

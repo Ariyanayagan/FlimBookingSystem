@@ -11,8 +11,9 @@ namespace Flim.Application.Interfaces
 {
     public interface IFilmService
     {
-        Task<int> CreateFilmAsync(FilmDTO filmDto);
-        Task<FilmDTO> GetFilmByIdAsync(int id);
+        Task<int> CreateFilmAsync(AddFilmDTO filmDto);
+        Task<Film> GetFilmByIdAsync(int id);
         Task<IEnumerable<Film>> GetFilmByNameAsync(string name);
+        Task<IEnumerable<Film>> GetFilmAsync();
     }
 }
