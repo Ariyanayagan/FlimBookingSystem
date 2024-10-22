@@ -18,6 +18,7 @@ namespace Flim.Infrastructures.Data
         public DbSet<Seat> Seats { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Slot> Slots { get; set; }
+        public DbSet<HeldTicket> HeldTickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,7 +28,7 @@ namespace Flim.Infrastructures.Data
                 entity.HasKey(e => e.UserId);
 
                 entity.Property(e => e.UserId)
-                      .ValueGeneratedOnAdd() // Ensures auto-increment.
+                      .ValueGeneratedOnAdd() 
                       .IsRequired();
             });
 
@@ -37,30 +38,20 @@ namespace Flim.Infrastructures.Data
                         .HasForeignKey(b => b.UserId);
 
 
-            //modelBuilder.Entity<Showtime>()
-            //    .HasOne(s => s.Film)
-            //    .WithMany(f => f.Showtimes)
-            //    .HasForeignKey(s => s.FilmId);
+
 
             modelBuilder.Entity<Slot>()
                 .HasOne(s => s.Film)
-                .WithMany(f => f.Slots) // Updated to Slots
+                .WithMany(f => f.Slots) 
                 .HasForeignKey(s => s.FilmId);
 
-            //modelBuilder.Entity<Booking>()
-            //    .HasOne(b => b.Showtime)
-            //    .WithMany(s => s.Bookings)
-            //    .HasForeignKey(b => b.ShowtimeId);
+
 
             modelBuilder.Entity<Booking>()
-               .HasOne(b => b.Slot) // Updated to Slot
+               .HasOne(b => b.Slot) 
                .WithMany(s => s.Bookings)
                .HasForeignKey(b => b.SlotId);
 
-            //modelBuilder.Entity<Seat>()
-            //    .HasOne(s => s.Showtime)
-            //    .WithMany(st => st.Seats)
-            //    .HasForeignKey(s => s.ShowtimeId);
 
             modelBuilder.Entity<Seat>()
                .HasOne(s => s.Slot) // Updated to Slot
@@ -80,6 +71,26 @@ namespace Flim.Infrastructures.Data
                 .HasOne(bs => bs.Seat)
                 .WithMany(s => s.BookingSeats)
                 .HasForeignKey(bs => bs.SeatId);
+
+            modelBuilder.Entity<HeldTicket>()
+                .HasOne(ht => ht.Film)
+                .WithMany()
+                .HasForeignKey(ht => ht.FilmId);
+
+            modelBuilder.Entity<HeldTicket>()
+                .HasOne(ht => ht.Slot)
+                .WithMany()
+                .HasForeignKey(ht => ht.SlotId);
+
+            modelBuilder.Entity<HeldTicket>()
+                .HasOne(ht => ht.Seat)
+                .WithMany()
+                .HasForeignKey(ht => ht.SeatId);
+
+            modelBuilder.Entity<HeldTicket>()
+                .HasOne(ht => ht.User)
+                .WithMany()
+                .HasForeignKey(ht => ht.UserId);
 
 
 

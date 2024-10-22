@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flim.Infrastructures.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20241021125658_AddExtracol")]
-    partial class AddExtracol
+    [Migration("20241022140752_addTables")]
+    partial class addTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,9 +36,6 @@ namespace Flim.Infrastructures.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ShowtimeId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SlotId")
                         .HasColumnType("integer");
 
@@ -49,8 +46,6 @@ namespace Flim.Infrastructures.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("BookingId");
-
-                    b.HasIndex("ShowtimeId");
 
                     b.HasIndex("SlotId");
 
@@ -102,6 +97,42 @@ namespace Flim.Infrastructures.Migrations
                     b.ToTable("Films");
                 });
 
+            modelBuilder.Entity("Flim.Domain.Entities.HeldTicket", b =>
+                {
+                    b.Property<int>("HeldTicketId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("HeldTicketId"));
+
+                    b.Property<int>("FilmId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("HoldExpiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SeatId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SlotId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("HeldTicketId");
+
+                    b.HasIndex("FilmId");
+
+                    b.HasIndex("SeatId");
+
+                    b.HasIndex("SlotId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("HeldTickets");
+                });
+
             modelBuilder.Entity("Flim.Domain.Entities.Seat", b =>
                 {
                     b.Property<int>("SeatId")
@@ -120,40 +151,14 @@ namespace Flim.Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ShowtimeId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("SlotId")
                         .HasColumnType("integer");
 
                     b.HasKey("SeatId");
 
-                    b.HasIndex("ShowtimeId");
-
                     b.HasIndex("SlotId");
 
                     b.ToTable("Seats");
-                });
-
-            modelBuilder.Entity("Flim.Domain.Entities.Showtime", b =>
-                {
-                    b.Property<int>("ShowtimeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ShowtimeId"));
-
-                    b.Property<int>("FilmId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("ShowtimeId");
-
-                    b.HasIndex("FilmId");
-
-                    b.ToTable("Showtimes");
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Slot", b =>
@@ -170,8 +175,8 @@ namespace Flim.Infrastructures.Migrations
                     b.Property<int>("ShowCategory")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("SlotDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateOnly>("SlotDate")
+                        .HasColumnType("date");
 
                     b.HasKey("SlotId");
 
@@ -211,12 +216,6 @@ namespace Flim.Infrastructures.Migrations
 
             modelBuilder.Entity("Flim.Domain.Entities.Booking", b =>
                 {
-                    b.HasOne("Flim.Domain.Entities.Showtime", "Showtime")
-                        .WithMany("Bookings")
-                        .HasForeignKey("ShowtimeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Flim.Domain.Entities.Slot", "Slot")
                         .WithMany("Bookings")
                         .HasForeignKey("SlotId")
@@ -228,8 +227,6 @@ namespace Flim.Infrastructures.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Showtime");
 
                     b.Navigation("Slot");
 
@@ -255,34 +252,50 @@ namespace Flim.Infrastructures.Migrations
                     b.Navigation("Seat");
                 });
 
-            modelBuilder.Entity("Flim.Domain.Entities.Seat", b =>
+            modelBuilder.Entity("Flim.Domain.Entities.HeldTicket", b =>
                 {
-                    b.HasOne("Flim.Domain.Entities.Showtime", "Showtime")
-                        .WithMany("Seats")
-                        .HasForeignKey("ShowtimeId")
+                    b.HasOne("Flim.Domain.Entities.Film", "Film")
+                        .WithMany()
+                        .HasForeignKey("FilmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Flim.Domain.Entities.Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Flim.Domain.Entities.Slot", "Slot")
+                        .WithMany()
+                        .HasForeignKey("SlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Flim.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Film");
+
+                    b.Navigation("Seat");
+
+                    b.Navigation("Slot");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Flim.Domain.Entities.Seat", b =>
+                {
                     b.HasOne("Flim.Domain.Entities.Slot", "Slot")
                         .WithMany("Seats")
                         .HasForeignKey("SlotId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Showtime");
-
                     b.Navigation("Slot");
-                });
-
-            modelBuilder.Entity("Flim.Domain.Entities.Showtime", b =>
-                {
-                    b.HasOne("Flim.Domain.Entities.Film", "Film")
-                        .WithMany("Showtimes")
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Film");
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Slot", b =>
@@ -303,21 +316,12 @@ namespace Flim.Infrastructures.Migrations
 
             modelBuilder.Entity("Flim.Domain.Entities.Film", b =>
                 {
-                    b.Navigation("Showtimes");
-
                     b.Navigation("Slots");
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Seat", b =>
                 {
                     b.Navigation("BookingSeats");
-                });
-
-            modelBuilder.Entity("Flim.Domain.Entities.Showtime", b =>
-                {
-                    b.Navigation("Bookings");
-
-                    b.Navigation("Seats");
                 });
 
             modelBuilder.Entity("Flim.Domain.Entities.Slot", b =>

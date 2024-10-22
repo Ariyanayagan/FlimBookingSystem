@@ -16,7 +16,6 @@ namespace Flim.Application.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFilmService, FilmService>();
-            services.AddScoped<IShowtimeService, ShowtimeService>();
             services.AddScoped<ISlotService, SlotService>();
             services.AddScoped<ISeatService, SeatService>();
             services.AddScoped<IBookingService, BookingService>();

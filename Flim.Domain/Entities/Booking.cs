@@ -15,8 +15,6 @@ namespace Flim.Domain.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public int ShowtimeId { get; set; }
-        public Showtime Showtime { get; set; }
 
         public int SlotId { get; set; }
         public Slot Slot { get; set; } 
