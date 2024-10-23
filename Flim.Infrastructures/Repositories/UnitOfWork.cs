@@ -4,6 +4,7 @@ using Flim.Domain.Shared;
 using Flim.Infrastructures.Data;
 using Flim.Infrastructures.Interfaces;
 using Flim.Infrastructures.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Flim.Infrastructures.Repositories
 {
@@ -49,7 +51,7 @@ namespace Flim.Infrastructures.Repositories
 
         public async Task BeginTransaction()
         {
-            _transaction = await _context.Database.BeginTransactionAsync();
+            _transaction =  await _context.Database.BeginTransactionAsync();
         }
 
         public async Task CommitTransaction()

@@ -74,6 +74,27 @@ namespace Flim.Infrastructures.Repositories
         {
             return await _dbSet.SingleOrDefaultAsync(predicate);
         }
+
+        public async Task InsertRangeAsync(IEnumerable<T> entities)
+        {
+            if(entities == null)
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
+
+            await _dbSet.AddRangeAsync(entities);
+        }
+
+        public void UpdateRange(List<T> entities)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
+
+            _dbSet.UpdateRange(entities);
+        }
+
     }
 
 }

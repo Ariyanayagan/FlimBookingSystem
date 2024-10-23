@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Flim.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Flim.Application.ApplicationException;
 
 namespace Flim.Application.Services
 {
@@ -56,7 +57,11 @@ namespace Flim.Application.Services
         public async Task<Film> GetFilmByIdAsync(int id)
         {
             var flim = await _filmRepository.GetByIdAsync(id);
+
+            if (flim is null) throw new NotFoundException("Flim Not Found");
             var slots = await  _unitOfWork.Repository<Slot>().FindAsync(s=>s.FilmId == id);
+
+
 
             flim.Slots = slots.ToList();
 

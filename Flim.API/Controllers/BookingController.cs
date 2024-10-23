@@ -1,5 +1,6 @@
 ﻿using Flim.Application.DTOs;
 using Flim.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -28,14 +29,27 @@ namespace Flim.API.Controllers
 
         }
 
-        [HttpPost("hold")]
+        [HttpPost("book-now")]
+        [Authorize]
         public async Task<IActionResult> HoldTicketAsync([FromBody] BookingDTO booking)
         {
 
-            var results = await _bookingService.HoldAsync(booking);
+            await _bookingService.HoldAsync(booking);
 
 
-            return Ok(results);
+            return Ok();
+
+        }
+
+        [HttpPost("confirm")]
+        [Authorize]
+        public async Task<IActionResult> ConfirmTicketAsync([FromBody] ConfirmBookingDTO booking)
+        {
+
+            await _bookingService.ConfirmAsync(booking);
+
+
+            return Ok();
 
         }
 

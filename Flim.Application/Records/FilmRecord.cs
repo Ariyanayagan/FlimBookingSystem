@@ -14,4 +14,12 @@ namespace Flim.Application.Records
         int Duration,
         List<SlotRecord> Slots
     );
+
+    public record MyOrderRecord(
+       string MovieName,
+       decimal Amount,
+       DateTime dateTIme,
+       string ShowTime,
+       DateOnly SlotDate
+   );
 }

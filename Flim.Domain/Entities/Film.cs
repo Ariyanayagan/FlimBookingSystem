@@ -14,6 +14,8 @@ namespace Flim.Domain.Entities
         public int Duration { get; set; } // in minutes
         public string Genre { get; set; }
 
+        public decimal Amount { get; set; } 
+
        //public ICollection<Showtime> Showtimes { get; set; }
 
         public ICollection<Slot> Slots { get; set; }

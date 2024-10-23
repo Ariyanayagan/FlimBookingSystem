@@ -13,7 +13,10 @@ namespace Flim.Domain.Shared
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(object id);
         Task InsertAsync(T entity);
+
+        Task InsertRangeAsync(IEnumerable<T> entities);
         Task UpdateAsync(T entity);
+        void UpdateRange(List<T> entities);
         Task DeleteAsync(object id);
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task<T> FindSingleAsync(Expression<Func<T, bool>> predicate);

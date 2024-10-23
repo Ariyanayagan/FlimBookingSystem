@@ -1,7 +1,9 @@
 ﻿using BCrypt.Net;
 using Flim.Application.Interfaces;
+using Flim.Application.Records;
 using Flim.Domain.Entities;
 using Flim.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,6 +53,31 @@ namespace Flim.Application.Services
                 throw ex;
             }
             
+        }
+
+
+        public async Task<List<MyOrderRecord>> GetBookingsAsync(int id)
+        {
+
+            var myBookings = await _userRepository.GetAllAsync(include: user => user
+                  .Include(u => u.Bookings)
+                  .ThenInclude(b => b.Slot)
+                  .ThenInclude(s => s.Film)
+             );
+
+            var userBookings = myBookings.Where(user => user.UserId == id);
+
+            var bookingDetails = userBookings.SelectMany(user => user.Bookings.Select(booking => new MyOrderRecord
+            (
+                MovieName: booking.Slot.Film.Name,
+                Amount: booking.TotalCost,
+                dateTIme: booking.BookingDate,
+                ShowTime: booking.Slot.ShowCategory.ToString(), 
+                SlotDate: booking.Slot.SlotDate
+            )))
+            .ToList();
+
+            return bookingDetails;
         }
     }
 }

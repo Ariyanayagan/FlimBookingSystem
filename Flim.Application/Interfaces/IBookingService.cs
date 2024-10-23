@@ -12,7 +12,9 @@ namespace Flim.Application.Interfaces
     {
         Task<List<FilmRecord>> GetAvailableSeats(int id , DateOnly date);
 
-        Task<bool> HoldAsync(BookingDTO booking);
+        Task HoldAsync(BookingDTO booking);
+
+        Task<bool> ConfirmAsync(ConfirmBookingDTO booking);
 
 
     }

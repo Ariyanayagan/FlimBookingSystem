@@ -8,6 +8,9 @@ using System.Net;
 using Flim.Domain.Entities;
 using BCrypt.Net;
 using Flim.Application.Interfaces;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Flim.Application.Records;
 
 namespace Flim.API.Controllers
 {
@@ -61,6 +64,25 @@ namespace Flim.API.Controllers
             }
 
             return Ok(ApiResponse<string>.Success("Register Successfully"));
+
+        }
+
+        [HttpGet("my-bookings")]
+        [Authorize]
+        public async Task<IActionResult> GetBookingAsync()
+        {
+           
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var result = await _userService.GetBookingsAsync(Convert.ToInt32(userId));
+
+            if (result is null)
+            {
+                return BadRequest(ApiResponse<string>.Failure("No Bookings", (int)HttpStatusCode.NotFound));
+            }
+
+            return Ok(ApiResponse<List<MyOrderRecord>>.Success(result:result));
 
         }
     }

@@ -12,8 +12,8 @@ namespace Flim.Domain.Entities
         public int FilmId { get; set; }
         public int SlotId { get; set; }
         public int SeatId { get; set; }
-        public DateTime HoldExpiration { get; set; }
         public int UserId { get; set; }
+        public DateTime HoldExpiration { get; set; }
 
         public Film Film { get; set; }
         public Slot Slot { get; set; }

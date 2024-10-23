@@ -87,10 +87,10 @@ namespace Flim.Infrastructures.Data
                 .WithMany()
                 .HasForeignKey(ht => ht.SeatId);
 
-            modelBuilder.Entity<HeldTicket>()
-                .HasOne(ht => ht.User)
-                .WithMany()
-                .HasForeignKey(ht => ht.UserId);
+            //modelBuilder.Entity<HeldTicket>()
+            //    .HasOne(ht => ht.User)
+            //    .WithMany()
+            //    .HasForeignKey(ht => ht.UserId);
 
 
 
