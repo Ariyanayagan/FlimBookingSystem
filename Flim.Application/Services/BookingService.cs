@@ -67,12 +67,12 @@ namespace Flim.Application.Services
 
                 if (!totalSeats.Any())
                 {
-                    throw new Exception("No seats available");
+                    throw new InvalidOperationException("No seats available");
                 }
 
                 if (totalSeats.Count != booking.SeatNumbers.Count())
                 {
-                    throw new Exception("Ticket Already Booked!");
+                    throw new InvalidOperationException("Ticket Already Booked!");
                 }
 
                 List<HeldTicket> heldTickets = new List<HeldTicket>();
@@ -85,7 +85,7 @@ namespace Flim.Application.Services
 
                     if (heltseats.Any())
                     {
-                        throw new Exception("Ticket already in hold!");
+                        throw new InvalidOperationException("Ticket already in hold!");
                     }
                     else
                     {

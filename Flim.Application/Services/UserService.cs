@@ -1,4 +1,5 @@
 ﻿using BCrypt.Net;
+using Flim.Application.ApplicationException;
 using Flim.Application.Interfaces;
 using Flim.Application.Records;
 using Flim.Domain.Entities;
@@ -50,6 +51,7 @@ namespace Flim.Application.Services
             catch (Exception ex) {
 
                 await _unitOfWork.RollbackTransaction();
+                await _unitOfWork.DisposeTransactionAsync();
                 throw ex;
             }
             
@@ -64,6 +66,12 @@ namespace Flim.Application.Services
                   .ThenInclude(b => b.Slot)
                   .ThenInclude(s => s.Film)
              );
+
+
+            if (myBookings is null || myBookings.Count() == 0)
+            {
+                throw new NotFoundException("Bookings Not found for this user id - " + id.ToString());
+            }
 
             var userBookings = myBookings.Where(user => user.UserId == id);
 

@@ -34,7 +34,12 @@ namespace Flim.API.Controllers
 
             var flim = await _filmService.CreateFilmAsync(filmDto);
 
-            return Ok(ApiResponse<int>.Success(flim,statusCode:(int)HttpStatusCode.Created));    
+            if (!flim)
+            {
+                return BadRequest(ApiResponse<string>.Failure("Film not created.", (int)HttpStatusCode.BadRequest));
+            }
+
+            return Ok(ApiResponse<string>.Success("Created",statusCode:(int)HttpStatusCode.Created));    
 
         }
 
@@ -42,8 +47,15 @@ namespace Flim.API.Controllers
         public async Task<IActionResult> GetFlimByName([FromQuery] string name)
         {
             var flims = await _filmService.GetFilmByNameAsync(name);
+
+            if(flims is null || flims.Count() == 0)
+            {
+                return NotFound(ApiResponse<string>.Success(result:$"{name} not found!", statusCode: (int)HttpStatusCode.NotFound));
+            }
+
             return Ok(ApiResponse<IEnumerable<Film>>.Success(flims,statusCode:(int)HttpStatusCode.OK));
         }
+
         [HttpGet("film-id/{id}")]
         public async Task<IActionResult> GetFlimById([FromRoute] int id)
         {
@@ -51,7 +63,7 @@ namespace Flim.API.Controllers
 
             if(film is null)
             {
-                return BadRequest(ApiResponse<string>.Failure($"Flim Not Found for this Id : {id}", statusCode: (int)HttpStatusCode.NotFound));
+                return NotFound(ApiResponse<string>.Failure($"Flim Not Found for this Id : {id}", statusCode: (int)HttpStatusCode.NotFound));
             }
 
             var result = new FilmDTO
@@ -69,6 +81,11 @@ namespace Flim.API.Controllers
         public async Task<IActionResult> GetAllAsync()
         {
             var films = await  _filmService.GetFilmAsync();
+
+            if(films is null ||films.Count() == 0)
+            {
+                return NotFound();
+            }
 
 
             var filmDtos = films.Select(f => new FilmDTO
@@ -99,9 +116,7 @@ namespace Flim.API.Controllers
             });
 
             return Ok(filmDtos);
-
-            
-            
+      
         }
 
     }

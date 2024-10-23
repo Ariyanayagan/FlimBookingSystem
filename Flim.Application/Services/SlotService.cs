@@ -54,17 +54,24 @@ namespace Flim.Application.Services
 
             };
 
-            await _unitOfWork.BeginTransaction();
+            try
+            {
+                await _unitOfWork.BeginTransaction();
 
-            await _slotRepository.InsertAsync( newSlot );
+                await _slotRepository.InsertAsync(newSlot);
 
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
-            await _unitOfWork.CommitTransaction();
+                await _unitOfWork.CommitTransaction();
 
-            return true;
+                return true;
 
-
+            }
+            catch (Exception ex) { 
+            
+                await _unitOfWork.RollbackTransaction();
+                throw ex;
+            }
         }
     }
 }

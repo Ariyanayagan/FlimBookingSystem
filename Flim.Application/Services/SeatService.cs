@@ -24,14 +24,25 @@ namespace Flim.Application.Services
 
         public async Task AddSeat(SeatDto seatDto)
         {
-            await _unitOfWork.BeginTransaction();
+            try
+            {
+                await _unitOfWork.BeginTransaction();
 
-            await _unitOfWork.SeatRepository.AddSeat(seatDto);
+                await _unitOfWork.SeatRepository.AddSeat(seatDto);
 
 
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
 
-            await _unitOfWork.CommitTransaction();
+                await _unitOfWork.CommitTransaction();
+            }
+            catch (Exception ex) { 
+
+                await _unitOfWork.RollbackTransaction();
+                await _unitOfWork.DisposeTransactionAsync();
+                throw ex;
+            
+            }
+
 
 
         }

@@ -24,7 +24,7 @@ namespace Flim.Application.Services
         }
 
 
-        public async Task<int> CreateFilmAsync(AddFilmDTO filmDto)
+        public async Task<bool> CreateFilmAsync(AddFilmDTO filmDto)
         {
             var flim = new Film
             {
@@ -35,13 +35,20 @@ namespace Flim.Application.Services
 
             };
 
-            await _unitOfWork.BeginTransaction();
-            await _filmRepository.InsertAsync(flim);
-            var result = await _unitOfWork.SaveAsync();
-            await _unitOfWork.CommitTransaction();
+            try
+            {
+                await _unitOfWork.BeginTransaction();
+                await _filmRepository.InsertAsync(flim);
+                await _unitOfWork.SaveAsync();
+                await _unitOfWork.CommitTransaction();
+                return true;
+            }
+            catch (Exception ex) { 
 
-            return result;
-
+                await _unitOfWork.RollbackTransaction();
+                await _unitOfWork.DisposeTransactionAsync();
+                throw ex;    
+            }
         }
 
         public async Task<IEnumerable<Film>> GetFilmAsync()
