@@ -103,7 +103,7 @@ namespace Flim.API.Controllers
                 Name = f.Name,
                 Slots = f.Slots.Select(s => new Slots
                 {
-                    ShowCategory = s.ShowCategory,
+                    ShowCategory = s.ShowCategory.ToString(),
                     FilmId = s.FilmId,
                     SlotDate = s.SlotDate,
                     SlotId = s.SlotId,

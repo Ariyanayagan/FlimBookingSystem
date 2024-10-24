@@ -5,6 +5,7 @@ using Flim.Domain.Entities;
 using Flim.Domain.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Security.Claims;
 
 

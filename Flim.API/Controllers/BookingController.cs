@@ -25,6 +25,11 @@ namespace Flim.API.Controllers
             
             var results = await _bookingService.GetAvailableSeats(id,date);
 
+            if (results is null || results.Count == 0)
+            {
+                return NotFound();
+            }
+
 
             return Ok(results);
 

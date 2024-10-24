@@ -8,7 +8,7 @@ namespace Flim.API.Exceptions
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            Log.Error(exception.ToString());
+            Log.Error(exception: exception, "Exception");
             var problemDetails = new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,

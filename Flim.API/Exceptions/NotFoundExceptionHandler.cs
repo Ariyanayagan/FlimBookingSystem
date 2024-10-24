@@ -10,7 +10,7 @@ namespace Flim.API.Exceptions
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            Log.Error(exception.ToString());
+            Log.Error(exception: exception,"Exception");
             if (exception is not NotFoundException notFoundException)
             {
                 return false;

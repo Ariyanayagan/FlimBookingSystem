@@ -12,7 +12,7 @@ namespace Flim.Application.DTOs
     {
         public int SlotId { get; set; }
         public DateOnly SlotDate { get; set; }
-        public ShowEnum ShowCategory { get; set; }
+        public string ShowCategory { get; set; }
 
         public int FilmId { get; set; }
 

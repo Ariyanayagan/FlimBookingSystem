@@ -39,6 +39,10 @@ namespace Flim.Infrastructures.Services
             {
                 claims.Add(new Claim(ClaimTypes.Role, "User"));
             }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
 
             var tokendescriptor = new SecurityTokenDescriptor
