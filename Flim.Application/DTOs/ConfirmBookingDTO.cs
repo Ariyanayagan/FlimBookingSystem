@@ -11,9 +11,5 @@ namespace Flim.Application.DTOs
     {
         public int FilmId { get; set; }
 
-        public ShowEnum category { get; set; }
-
-        public DateOnly date {  get; set; }
-
     }
 }

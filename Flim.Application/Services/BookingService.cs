@@ -66,7 +66,7 @@ namespace Flim.Application.Services
 
                 var totalSeats = await TotalSeats(booking);
 
-                if (!totalSeats.Any())
+                if ( totalSeats is null || !totalSeats.Any())
                 {
                     throw new InvalidOperationException("No seats available");
                 }
@@ -134,7 +134,11 @@ namespace Flim.Application.Services
                 await _unitOfWork.BeginTransaction();
                 var userId = httpContextAccess.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                var ticketsForPayment = await _unitOfWork.Repository<HeldTicket>().FindAsync(he => he.UserId == Convert.ToInt32(userId) && he.FilmId == bookingDTO.FilmId);
+                var ticketsForPayment = await _unitOfWork.Repository<HeldTicket>().FindAsync(he => he.UserId == Convert.ToInt32(userId) && 
+                        he.FilmId == bookingDTO.FilmId 
+                );
+
+                
 
                 var seatIds = ticketsForPayment.Select(t=>t.SeatId).ToList();
 
@@ -162,18 +166,18 @@ namespace Flim.Application.Services
 
                 decimal TotalAmount = amount * ticketsForPayment.Count();
 
-                var slot = await _unitOfWork.Repository<Slot>().FindAsync(slot => slot.FilmId == bookingDTO.FilmId
-                        && slot.SlotDate == bookingDTO.date &&
-                        slot.ShowCategory == bookingDTO.category);
+                //var slot = await _unitOfWork.Repository<Slot>().FindAsync(slot => slot.FilmId == bookingDTO.FilmId
+                //        && slot.SlotDate == bookingDTO.date &&
+                //        slot.ShowCategory == bookingDTO.category);
 
-                var slotId = slot.FirstOrDefault().SlotId;
+                //var slotId = slot.FirstOrDefault().SlotId;
 
                 
 
                 var bookEntity = new Booking
                 {
-                    BookingDate = bookingDTO.date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
-                    SlotId = slotId,
+                    BookingDate = DateTime.UtcNow,
+                    SlotId = slotID,
                     TotalCost = TotalAmount,
                     UserId = Convert.ToInt32(userId),
                     BookingSeats = seatIds.Select(seatId => new BookingSeat

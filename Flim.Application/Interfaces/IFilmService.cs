@@ -14,6 +14,7 @@ namespace Flim.Application.Interfaces
         Task<bool> CreateFilmAsync(AddFilmDTO filmDto);
         Task<Film> GetFilmByIdAsync(int id);
         Task<IEnumerable<Film>> GetFilmByNameAsync(string name);
+        Task<IEnumerable<Film>> GetFilmByGenreAsync(string name);
         Task<IEnumerable<Film>> GetFilmAsync();
     }
 }

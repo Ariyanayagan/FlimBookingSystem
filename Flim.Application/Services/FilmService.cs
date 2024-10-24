@@ -77,11 +77,16 @@ namespace Flim.Application.Services
 
         public async Task<IEnumerable<Film>> GetFilmByNameAsync(string name)
         {
-            var flim = await _filmRepository.FindAsync(flim => flim.Name == name);
+            var flim = await _filmRepository.FindAsync(flim => flim.Name.ToLower().Contains(name.ToLower()));
 
             return flim;
+        }
 
+        public async Task<IEnumerable<Film>> GetFilmByGenreAsync(string name)
+        {
+            var flim = await _filmRepository.FindAsync(flim => flim.Genre.ToLower().Contains(name.ToLower()));
 
+            return flim;
         }
     }
 }

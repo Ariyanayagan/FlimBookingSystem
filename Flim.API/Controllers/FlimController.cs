@@ -54,7 +54,7 @@ namespace Flim.API.Controllers
 
             if(flims is null || flims.Count() == 0)
             {
-                return NotFound(ApiResponse<string>.Success(result:$"{name} not found!", statusCode: (int)HttpStatusCode.NotFound));
+                return NotFound(ApiResponse<string>.Failure(message: $"{name} not found!", statusCode: (int)HttpStatusCode.NotFound));
             }
 
             var filmsDto = flims.Select(film => new ShowFilmRecord(
@@ -66,6 +66,27 @@ namespace Flim.API.Controllers
 
             return Ok(ApiResponse<IEnumerable<ShowFilmRecord>>.Success(filmsDto, statusCode:(int)HttpStatusCode.OK));
         }
+
+        [HttpGet("flim-genre")]
+        public async Task<IActionResult> GetFlimByGenre([FromQuery] string genre)
+        {
+            var flims = await _filmService.GetFilmByGenreAsync(genre);
+
+            if (flims is null || flims.Count() == 0)
+            {
+                return NotFound(ApiResponse<string>.Failure(message: $"{genre} not found!", statusCode: (int)HttpStatusCode.NotFound));
+            }
+
+            var filmsDto = flims.Select(film => new ShowFilmRecord(
+
+                film.Name, film.Description, film.Genre, film.Duration, film.Amount
+
+            ));
+
+
+            return Ok(ApiResponse<IEnumerable<ShowFilmRecord>>.Success(filmsDto, statusCode: (int)HttpStatusCode.OK));
+        }
+
 
         [HttpGet("film-id/{id}")]
         public async Task<IActionResult> GetFlimById([FromRoute] int id)

@@ -20,7 +20,7 @@ namespace Flim.API.Controllers
         }
 
         [HttpPost("bulk-add")]
-        public async Task<IActionResult> BulkAdd(SeatDto seat)
+        public async Task<IActionResult> BulkAdd([FromBody] SeatDto seat)
         {
             await seatService.AddSeat(seat);
             return Ok(ApiResponse<string>.Success("Added",statusCode:(int)HttpStatusCode.OK));

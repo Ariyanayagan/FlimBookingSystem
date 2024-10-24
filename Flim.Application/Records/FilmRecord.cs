@@ -28,6 +28,7 @@ namespace Flim.Application.Records
        decimal Amount,
        DateTime dateTIme,
        string ShowTime,
+       int ShowTimeint,
        DateOnly SlotDate,
        List<int> seats 
    );

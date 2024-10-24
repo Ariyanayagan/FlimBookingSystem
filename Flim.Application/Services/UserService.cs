@@ -81,6 +81,7 @@ namespace Flim.Application.Services
                 Amount: booking.TotalCost,
                 dateTIme: booking.BookingDate,
                 ShowTime: booking.Slot.ShowCategory.ToString(),
+                ShowTimeint: (int)booking.Slot.ShowCategory,
                 SlotDate: booking.Slot.SlotDate,
                 seats: getBookingSeats(booking.BookingId).GetAwaiter().GetResult()
             )));
@@ -90,9 +91,9 @@ namespace Flim.Application.Services
 
         public async Task<List<int>> getBookingSeats(int id)
         {
-            var bookingSeats = await _unitOfWork.Repository<BookingSeat>().FindAsync(se => se.BookingId == id);
+            var bookingSeats = await _unitOfWork.Repository<BookingSeat>().GetAllAsync(include: bs => bs.Include(s => s.Seat));
 
-            return bookingSeats.Select(se => se.SeatId).ToList<int>();
+            return bookingSeats.Where(se => se.BookingId == id).Select(se => se.Seat.Number).ToList();
 
         }
     }
