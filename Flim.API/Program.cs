@@ -5,10 +5,10 @@ using Flim.Infrastructures.Data;
 using Flim.Infrastructures.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +71,9 @@ builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 
 
 builder.Services.AddProblemDetails();
+
+builder.Host.UseSerilog((context,configuration)=>
+configuration.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 

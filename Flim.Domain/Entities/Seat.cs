@@ -13,6 +13,7 @@ namespace Flim.Domain.Entities
         public string Row { get; set; }
         public bool IsReserved { get; set; }
 
+        public int? UserId { get; set; }
 
         public int SlotId { get; set; } 
         public Slot Slot { get; set; } 

@@ -80,12 +80,20 @@ namespace Flim.Application.Services
                 MovieName: booking.Slot.Film.Name,
                 Amount: booking.TotalCost,
                 dateTIme: booking.BookingDate,
-                ShowTime: booking.Slot.ShowCategory.ToString(), 
-                SlotDate: booking.Slot.SlotDate
-            )))
-            .ToList();
+                ShowTime: booking.Slot.ShowCategory.ToString(),
+                SlotDate: booking.Slot.SlotDate,
+                seats: getBookingSeats(booking.BookingId).GetAwaiter().GetResult()
+            )));
 
-            return bookingDetails;
+            return bookingDetails.ToList();
+        }
+
+        public async Task<List<int>> getBookingSeats(int id)
+        {
+            var bookingSeats = await _unitOfWork.Repository<BookingSeat>().FindAsync(se => se.BookingId == id);
+
+            return bookingSeats.Select(se => se.SeatId).ToList<int>();
+
         }
     }
 }

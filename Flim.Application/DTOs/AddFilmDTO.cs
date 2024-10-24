@@ -12,5 +12,7 @@ namespace Flim.Application.DTOs
         public string Description { get; set; }
         public int Duration { get; set; } // in minutes
         public string Genre { get; set; }
+
+        public decimal Amount {  get; set; }    
     }
 }

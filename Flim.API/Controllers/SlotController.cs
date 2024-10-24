@@ -1,6 +1,7 @@
 ﻿using Flim.API.Common;
 using Flim.Application.DTOs;
 using Flim.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -9,6 +10,7 @@ namespace Flim.API.Controllers
 {
     [Route("api/slot")]
     [ApiController]
+    [Authorize]
     public class SlotController : ControllerBase
     {
         public readonly ISlotService _slotService;

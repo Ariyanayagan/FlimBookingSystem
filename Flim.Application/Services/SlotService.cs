@@ -23,12 +23,20 @@ namespace Flim.Application.Services
 
         public async Task<bool> CreateSlotAsync(SlotDTO slotDTO)
         {
+
+            if((int)slotDTO.ShowCategory >= 3)
+            {
+                throw new InvalidOperationException("You can only create 0,1,2 0 -  Morning | 1 - Afternoon | 2 - Mid night.");
+            }
+
             var film = await _unitOfWork.Repository<Film>().FindSingleAsync(f=>f.FilmId == slotDTO.FilmId);
 
             if (film == null)
             {
                 throw new Exception("Film not found.");
             }
+
+
 
             var existingSlots = await _slotRepository.FindAsync( s => s.FilmId == slotDTO.FilmId && 
                                                                  s.SlotDate == slotDTO.SlotDate );

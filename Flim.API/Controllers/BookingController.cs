@@ -10,6 +10,7 @@ namespace Flim.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookingController : ControllerBase
     {
         public readonly IBookingService _bookingService;
@@ -30,7 +31,6 @@ namespace Flim.API.Controllers
         }
 
         [HttpPost("book-now")]
-        [Authorize]
         public async Task<IActionResult> HoldTicketAsync([FromBody] BookingDTO booking)
         {
 
@@ -42,7 +42,6 @@ namespace Flim.API.Controllers
         }
 
         [HttpPost("confirm")]
-        [Authorize]
         public async Task<IActionResult> ConfirmTicketAsync([FromBody] ConfirmBookingDTO booking)
         {
 

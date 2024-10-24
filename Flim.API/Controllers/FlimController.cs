@@ -9,12 +9,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Flim.Application.Records;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Flim.API.Controllers
 {
     [Route("api/film")]
     [ApiController]
+    [Authorize]
     public class FlimController : ControllerBase
     {
         private readonly IFilmService _filmService;
@@ -25,6 +28,7 @@ namespace Flim.API.Controllers
         }
 
         [HttpPost("add")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateFilm([FromBody] AddFilmDTO filmDto)
         {
             if (filmDto == null)
@@ -53,7 +57,14 @@ namespace Flim.API.Controllers
                 return NotFound(ApiResponse<string>.Success(result:$"{name} not found!", statusCode: (int)HttpStatusCode.NotFound));
             }
 
-            return Ok(ApiResponse<IEnumerable<Film>>.Success(flims,statusCode:(int)HttpStatusCode.OK));
+            var filmsDto = flims.Select(film => new ShowFilmRecord(
+
+                film.Name, film.Description, film.Genre, film.Duration, film.Amount
+
+            ));
+
+
+            return Ok(ApiResponse<IEnumerable<ShowFilmRecord>>.Success(filmsDto, statusCode:(int)HttpStatusCode.OK));
         }
 
         [HttpGet("film-id/{id}")]
@@ -66,15 +77,10 @@ namespace Flim.API.Controllers
                 return NotFound(ApiResponse<string>.Failure($"Flim Not Found for this Id : {id}", statusCode: (int)HttpStatusCode.NotFound));
             }
 
-            var result = new FilmDTO
-            {
-                Name = film.Name,
-                Description = film.Description,
-                Duration = film.Duration,
-                Genre = film.Genre
-            };
+            var result = new ShowFilmRecord(name: film.Name,Description:film.Description, Genre: film.Genre,Duration:film.Duration,amount:film.Amount);
+            
 
-            return Ok(ApiResponse<FilmDTO>.Success(result, statusCode: (int)HttpStatusCode.OK));
+            return Ok(ApiResponse<ShowFilmRecord>.Success(result, statusCode: (int)HttpStatusCode.OK));
         }
 
         [HttpGet("All")]

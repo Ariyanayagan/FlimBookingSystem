@@ -135,6 +135,8 @@ namespace Flim.Application.Services
 
                 var ticketsForPayment = await _unitOfWork.Repository<HeldTicket>().FindAsync(he => he.UserId == Convert.ToInt32(userId) && he.FilmId == bookingDTO.FilmId);
 
+                var seatIds = ticketsForPayment.Select(t=>t.SeatId).ToList();
+
                 if (ticketsForPayment.Count() <= 0) {
 
                     throw new Exception("You need to Checkout First !");
@@ -172,7 +174,11 @@ namespace Flim.Application.Services
                     BookingDate = bookingDTO.date.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc),
                     SlotId = slotId,
                     TotalCost = TotalAmount,
-                    UserId = Convert.ToInt32(userId)
+                    UserId = Convert.ToInt32(userId),
+                    BookingSeats = seatIds.Select(seatId => new BookingSeat
+                    {
+                        SeatId = seatId
+                    }).ToList()
                 };
 
                 await _unitOfWork.Repository<Booking>().InsertAsync(bookEntity);

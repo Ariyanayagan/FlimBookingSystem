@@ -32,7 +32,7 @@ namespace Flim.Application.Services
                 Description = filmDto.Description,
                 Duration = filmDto.Duration,
                 Genre = filmDto.Genre,
-
+                Amount = filmDto.Amount
             };
 
             try

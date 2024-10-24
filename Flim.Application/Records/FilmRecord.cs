@@ -15,11 +15,20 @@ namespace Flim.Application.Records
         List<SlotRecord> Slots
     );
 
+    public record ShowFilmRecord(
+       string name,
+       string Description,
+       string Genre,
+       int Duration,
+       decimal amount
+   );
+
     public record MyOrderRecord(
        string MovieName,
        decimal Amount,
        DateTime dateTIme,
        string ShowTime,
-       DateOnly SlotDate
+       DateOnly SlotDate,
+       List<int> seats 
    );
 }
