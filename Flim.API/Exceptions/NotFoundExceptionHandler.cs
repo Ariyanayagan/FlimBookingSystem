@@ -2,6 +2,7 @@
 using Flim.Application.ApplicationException;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Flim.API.Exceptions
 {
@@ -9,6 +10,7 @@ namespace Flim.API.Exceptions
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+            Log.Error(exception.ToString());
             if (exception is not NotFoundException notFoundException)
             {
                 return false;
@@ -16,7 +18,7 @@ namespace Flim.API.Exceptions
 
             var problemDetails = new ProblemDetails
             {
-                Status = StatusCodes.Status400BadRequest,
+                Status = StatusCodes.Status404NotFound,
                 Title = "Bad Request",
                 Detail = notFoundException.Message
             };

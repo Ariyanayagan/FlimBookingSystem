@@ -1,6 +1,7 @@
 ﻿using Flim.Application.ApplicationException;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Flim.API.Exceptions
 {
@@ -8,6 +9,8 @@ namespace Flim.API.Exceptions
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+            Log.Error(exception.ToString());
+
             if (exception is not BadRequestException badRequestException)
             {
                 return false;

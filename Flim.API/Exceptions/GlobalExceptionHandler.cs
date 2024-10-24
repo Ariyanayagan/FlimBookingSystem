@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Flim.API.Exceptions
 {
@@ -7,6 +8,7 @@ namespace Flim.API.Exceptions
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+            Log.Error(exception.ToString());
             var problemDetails = new ProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,
