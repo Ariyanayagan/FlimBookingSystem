@@ -12,8 +12,8 @@ namespace Flim.Domain.Shared
         ISeatRepository SeatRepository { get; }
         IGenericRepository<TEntity> Repository<TEntity>() where TEntity : class;
         Task<int> SaveAsync();
-        Task BeginTransaction();
-        Task CommitTransaction();
+        void BeginTransaction();
+        void CommitTransaction();
         Task RollbackTransaction();
 
         Task DisposeTransactionAsync();

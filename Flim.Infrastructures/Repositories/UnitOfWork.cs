@@ -49,12 +49,12 @@ namespace Flim.Infrastructures.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public async Task BeginTransaction()
+        public void BeginTransaction()
         {
-            _transaction =  await _context.Database.BeginTransactionAsync();
+            _transaction = _context.Database.BeginTransaction();
         }
 
-        public async Task CommitTransaction()
+        public async void CommitTransaction()
         {
             if (_transaction != null)
             {

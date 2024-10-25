@@ -42,10 +42,10 @@ namespace Flim.Application.Services
         {
             try
             {
-                await _unitOfWork.BeginTransaction();
+                 _unitOfWork.BeginTransaction();
                 await _userRepository.InsertAsync(user);
                 await _unitOfWork.SaveAsync();
-                await _unitOfWork.CommitTransaction();
+                 _unitOfWork.CommitTransaction();
                 return true;
             }
             catch (Exception ex) {

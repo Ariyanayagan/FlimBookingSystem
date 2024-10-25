@@ -26,14 +26,14 @@ namespace Flim.Application.Services
         {
             try
             {
-                await _unitOfWork.BeginTransaction();
+                 _unitOfWork.BeginTransaction();
 
                 await _unitOfWork.SeatRepository.AddSeat(seatDto);
 
 
                 await _unitOfWork.SaveAsync();
 
-                await _unitOfWork.CommitTransaction();
+                 _unitOfWork.CommitTransaction();
             }
             catch (Exception ex) { 
 

@@ -41,7 +41,7 @@ namespace Flim.Application.Services
                         slot.SlotId,
                         slot.ShowCategory.ToString(),
                         slot.Seats
-                            .Where(seat => !seat.IsReserved)
+                            .Where(seat => seat.IsReserved == false)
                             .OrderBy(seat => seat.Number)
                             .Select(seat => new SeatRecord(
                                 seat.SeatId,
@@ -62,7 +62,6 @@ namespace Flim.Application.Services
             try
             {
                 var userId = httpContextAccess.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                await _unitOfWork.BeginTransaction();
 
                 var totalSeats = await TotalSeats(booking);
 
@@ -104,14 +103,15 @@ namespace Flim.Application.Services
                         heldTickets.Add(entity);
                     }
                 }
-
-                await repo.InsertRangeAsync(heldTickets);
+                
 
                 try
                 {
+                    _unitOfWork.BeginTransaction();
+                    await repo.InsertRangeAsync(heldTickets);
                     _unitOfWork.Repository<Seat>().UpdateRange(totalSeats);
                     await _unitOfWork.SaveAsync();
-                    await _unitOfWork.CommitTransaction();
+                    _unitOfWork.CommitTransaction();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +131,6 @@ namespace Flim.Application.Services
         {
             try
             {
-                await _unitOfWork.BeginTransaction();
                 var userId = httpContextAccess.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 var ticketsForPayment = await _unitOfWork.Repository<HeldTicket>().FindAsync(he => he.UserId == Convert.ToInt32(userId) && 
@@ -166,14 +165,6 @@ namespace Flim.Application.Services
 
                 decimal TotalAmount = amount * ticketsForPayment.Count();
 
-                //var slot = await _unitOfWork.Repository<Slot>().FindAsync(slot => slot.FilmId == bookingDTO.FilmId
-                //        && slot.SlotDate == bookingDTO.date &&
-                //        slot.ShowCategory == bookingDTO.category);
-
-                //var slotId = slot.FirstOrDefault().SlotId;
-
-                
-
                 var bookEntity = new Booking
                 {
                     BookingDate = DateTime.UtcNow,
@@ -186,6 +177,8 @@ namespace Flim.Application.Services
                     }).ToList()
                 };
 
+                _unitOfWork.BeginTransaction();
+
                 await _unitOfWork.Repository<Booking>().InsertAsync(bookEntity);
                 var repo =  _unitOfWork.Repository<HeldTicket>();
                 
@@ -194,7 +187,7 @@ namespace Flim.Application.Services
                     await repo.DeleteAsync(item.HeldTicketId);
                 }
                 await _unitOfWork.SaveAsync();
-                await _unitOfWork.CommitTransaction();
+                _unitOfWork.CommitTransaction();
 
                 return true;
             }

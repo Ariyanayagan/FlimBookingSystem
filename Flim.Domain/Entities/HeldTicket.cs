@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ namespace Flim.Domain.Entities
         public int SeatId { get; set; }
         public int UserId { get; set; }
         public DateTime HoldExpiration { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; } // Concurrency token
 
         public Film Film { get; set; }
         public Slot Slot { get; set; }

@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flim.Domain", "Flim.Domain\Flim.Domain.csproj", "{61C72CAD-C13D-454B-A39B-F3CA483AFFC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flim.Domain", "Flim.Domain\Flim.Domain.csproj", "{61C72CAD-C13D-454B-A39B-F3CA483AFFC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flim.Application", "Flim.Application\Flim.Application.csproj", "{31D1F514-7C18-4F41-B044-7DDA21894F48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flim.Application", "Flim.Application\Flim.Application.csproj", "{31D1F514-7C18-4F41-B044-7DDA21894F48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flim.Infrastructures", "Flim.Infrastructures\Flim.Infrastructures.csproj", "{8FA56667-C627-4395-8EE3-8C97906A1D7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flim.Infrastructures", "Flim.Infrastructures\Flim.Infrastructures.csproj", "{8FA56667-C627-4395-8EE3-8C97906A1D7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flim.API", "Flim.API\Flim.API.csproj", "{2D1D14E8-D909-49F8-8D74-F9576D181A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flim.API", "Flim.API\Flim.API.csproj", "{2D1D14E8-D909-49F8-8D74-F9576D181A04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Film.Tests", "Film.Tests\Film.Tests.csproj", "{9498E8D9-431B-413F-9BEE-800067C49B8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2D1D14E8-D909-49F8-8D74-F9576D181A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D1D14E8-D909-49F8-8D74-F9576D181A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D1D14E8-D909-49F8-8D74-F9576D181A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9498E8D9-431B-413F-9BEE-800067C49B8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9498E8D9-431B-413F-9BEE-800067C49B8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9498E8D9-431B-413F-9BEE-800067C49B8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9498E8D9-431B-413F-9BEE-800067C49B8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

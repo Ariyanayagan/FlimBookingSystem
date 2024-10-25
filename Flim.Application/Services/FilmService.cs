@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Flim.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Flim.Application.ApplicationException;
+using Newtonsoft.Json;
 
 namespace Flim.Application.Services
 {
@@ -37,10 +38,10 @@ namespace Flim.Application.Services
 
             try
             {
-                await _unitOfWork.BeginTransaction();
+                 _unitOfWork.BeginTransaction();
                 await _filmRepository.InsertAsync(flim);
                 await _unitOfWork.SaveAsync();
-                await _unitOfWork.CommitTransaction();
+                 _unitOfWork.CommitTransaction();
                 return true;
             }
             catch (Exception ex) { 
@@ -88,5 +89,37 @@ namespace Flim.Application.Services
 
             return flim;
         }
+
+        public async Task GetSales()
+        {
+            var films = await _filmRepository.GetAllAsync(film =>
+                 film.Include(f => f.Slots)
+                     .ThenInclude(s => s.Seats)
+             );
+
+            var reservedSeats = films
+                .Select(f => new
+                {
+                    Film = f.Name,
+                    ReservedSlots = f.Slots
+                        .Select(sl => new
+                        {
+                            Slot = sl.ShowCategory.ToString(),
+                            date = sl.SlotDate,
+                            ReservedSeats = sl.Seats.Where(se => se.IsReserved).Select(se => se.Number).ToList(),
+                            TotalSales = sl.Seats.Where(se => se.IsReserved).Select(se => se.Number).ToList().Count() * f.Amount
+                        })
+                        .Where(sl => sl.ReservedSeats.Any())
+                })
+                .Where(f => f.ReservedSlots.Any());
+
+            var jsonSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            var stringresult = JsonConvert.SerializeObject(reservedSeats,jsonSettings);
+        }
+
     }
 }

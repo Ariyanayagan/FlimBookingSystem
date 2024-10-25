@@ -146,5 +146,15 @@ namespace Flim.API.Controllers
       
         }
 
+        [HttpGet("sales")]
+        public async Task<IActionResult> GetAllSalesAsync()
+        {
+
+            await _filmService.GetSales();
+
+            return Ok();
+
+        }
+
     }
 }

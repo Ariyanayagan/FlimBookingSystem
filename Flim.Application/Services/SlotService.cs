@@ -64,13 +64,13 @@ namespace Flim.Application.Services
 
             try
             {
-                await _unitOfWork.BeginTransaction();
+                 _unitOfWork.BeginTransaction();
 
                 await _slotRepository.InsertAsync(newSlot);
 
                 await _unitOfWork.SaveAsync();
 
-                await _unitOfWork.CommitTransaction();
+                 _unitOfWork.CommitTransaction();
 
                 return true;
 

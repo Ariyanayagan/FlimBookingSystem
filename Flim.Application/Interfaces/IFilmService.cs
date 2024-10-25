@@ -16,5 +16,7 @@ namespace Flim.Application.Interfaces
         Task<IEnumerable<Film>> GetFilmByNameAsync(string name);
         Task<IEnumerable<Film>> GetFilmByGenreAsync(string name);
         Task<IEnumerable<Film>> GetFilmAsync();
+
+        Task GetSales();
     }
 }
