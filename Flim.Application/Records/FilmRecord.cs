@@ -32,4 +32,20 @@ namespace Flim.Application.Records
        DateOnly SlotDate,
        List<int> seats 
    );
+
+    public record FilmViewModel
+    {
+        public string Film { get; init; }
+        public List<SlotViewModel> ReservedSlots { get; init; }
+    }
+
+    public record SlotViewModel
+    {
+        public string Slot { get; init; }
+        public DateOnly Date { get; init; }
+        public List<int> ReservedSeats { get; init; }
+        public decimal TotalSales { get; init; }
+    }
+
+
 }

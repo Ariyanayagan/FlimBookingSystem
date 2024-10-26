@@ -147,12 +147,13 @@ namespace Flim.API.Controllers
         }
 
         [HttpGet("sales")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllSalesAsync()
         {
 
-            await _filmService.GetSales();
+           var result =  await _filmService.GetSales();
 
-            return Ok();
+            return Ok(result);
 
         }
 

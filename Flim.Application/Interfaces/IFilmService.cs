@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Flim.Domain.Entities;
+using Flim.Application.Records;
 
 
 namespace Flim.Application.Interfaces
@@ -17,6 +18,6 @@ namespace Flim.Application.Interfaces
         Task<IEnumerable<Film>> GetFilmByGenreAsync(string name);
         Task<IEnumerable<Film>> GetFilmAsync();
 
-        Task GetSales();
+        Task<List<FilmViewModel>> GetSales();
     }
 }

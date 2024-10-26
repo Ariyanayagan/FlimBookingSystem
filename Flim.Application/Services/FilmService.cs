@@ -10,6 +10,7 @@ using Flim.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Flim.Application.ApplicationException;
 using Newtonsoft.Json;
+using Flim.Application.Records;
 
 namespace Flim.Application.Services
 {
@@ -90,7 +91,38 @@ namespace Flim.Application.Services
             return flim;
         }
 
-        public async Task GetSales()
+        //public async Task GetSales()
+        //{
+        //    var films = await _filmRepository.GetAllAsync(film =>
+        //         film.Include(f => f.Slots)
+        //             .ThenInclude(s => s.Seats)
+        //     );
+
+        //    var reservedSeats = films
+        //        .Select(f => new
+        //        {
+        //            Film = f.Name,
+        //            ReservedSlots = f.Slots
+        //                .Select(sl => new
+        //                {
+        //                    Slot = sl.ShowCategory.ToString(),
+        //                    date = sl.SlotDate,
+        //                    ReservedSeats = sl.Seats.Where(se => se.IsReserved).Select(se => se.Number).ToList(),
+        //                    TotalSales = sl.Seats.Where(se => se.IsReserved).Select(se => se.Number).ToList().Count() * f.Amount
+        //                })
+        //                .Where(sl => sl.ReservedSeats.Any())
+        //        })
+        //        .Where(f => f.ReservedSlots.Any());
+
+        //    var jsonSettings = new JsonSerializerSettings
+        //    {
+        //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //    };
+
+        //    var stringresult = JsonConvert.SerializeObject(reservedSeats,jsonSettings);
+        //}
+
+        public async Task<List<FilmViewModel>> GetSales()
         {
             var films = await _filmRepository.GetAllAsync(film =>
                  film.Include(f => f.Slots)
@@ -98,28 +130,26 @@ namespace Flim.Application.Services
              );
 
             var reservedSeats = films
-                .Select(f => new
+                .Select(f => new FilmViewModel
                 {
                     Film = f.Name,
                     ReservedSlots = f.Slots
-                        .Select(sl => new
+                        .Select(sl => new SlotViewModel
                         {
                             Slot = sl.ShowCategory.ToString(),
-                            date = sl.SlotDate,
+                            Date = sl.SlotDate,
                             ReservedSeats = sl.Seats.Where(se => se.IsReserved).Select(se => se.Number).ToList(),
                             TotalSales = sl.Seats.Where(se => se.IsReserved).Select(se => se.Number).ToList().Count() * f.Amount
                         })
                         .Where(sl => sl.ReservedSeats.Any())
+                        .ToList()
                 })
-                .Where(f => f.ReservedSlots.Any());
+                .Where(f => f.ReservedSlots.Any())
+                .ToList();
 
-            var jsonSettings = new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-
-            var stringresult = JsonConvert.SerializeObject(reservedSeats,jsonSettings);
+            return reservedSeats;
         }
+
 
     }
 }
