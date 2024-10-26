@@ -107,7 +107,7 @@ Follow these steps to set up and run the project locally.
 > ```
 > ## For Postman: 
 > - Download Postman Client from official Website.
-> - In Postman, Go to collection and import a collection . [Download Postman Collection ✅](https://dotnet.microsoft.com/download/dotnet/8.0)
+> - In Postman, Go to collection and import a collection . [Download Postman Collection ✅](https://drive.google.com/file/d/1JsFf7WVQflQS1a1nOKpR12KIEGU8JWCe/view?usp=sharing)
 
 Swagger provides a user-friendly interface to test each endpoint, view request and response formats, and explore available functionality.
 
