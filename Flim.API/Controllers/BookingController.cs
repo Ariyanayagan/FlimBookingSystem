@@ -12,6 +12,9 @@ using System.Net;
 
 namespace Flim.API.Controllers
 {
+    /// <summary>
+    /// User bookings actions
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
@@ -23,6 +26,12 @@ namespace Flim.API.Controllers
             _bookingService = bookingService;
         }
 
+        /// <summary>
+        /// You can fetch available film
+        /// </summary>
+        /// <param name="id"> Need to mention FIlm id </param>
+        /// <param name="date"> Need to Mention particular date </param>
+        /// <returns></returns>
         [HttpGet("available")]
         public async Task<IActionResult> GetAvailableBookings([FromQuery] int id, [FromQuery] DateOnly date)
         {
@@ -44,6 +53,11 @@ namespace Flim.API.Controllers
 
         }
 
+        /// <summary>
+        /// You can hold a ticket for payments upto 20 mins
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
         [HttpPost("book-now")]
         public async Task<IActionResult> HoldTicketAsync([FromBody] BookingDTO booking)
         {
@@ -55,6 +69,11 @@ namespace Flim.API.Controllers
 
         }
 
+        /// <summary>
+        /// Confirm the hold tickets by you.
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
         [HttpPost("confirm")]
         public async Task<IActionResult> ConfirmTicketAsync([FromBody] ConfirmBookingDTO booking)
         {

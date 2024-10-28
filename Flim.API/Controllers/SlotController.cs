@@ -8,9 +8,12 @@ using System.Net;
 
 namespace Flim.API.Controllers
 {
+    /// <summary>
+    /// Admin has only access to create a slot for film
+    /// </summary>
     [Route("api/slot")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SlotController : ControllerBase
     {
         public readonly ISlotService _slotService;
@@ -19,6 +22,12 @@ namespace Flim.API.Controllers
             _slotService = slotService;
         }
 
+        /// <summary>
+        /// You can add a slot for a film. you can create only 3 slots per film 
+        /// i.e, Morning, Afternoon , Midnight.
+        /// </summary>
+        /// <param name="slotDTO"></param>
+        /// <returns></returns>
         [HttpPost("add")]
         public async Task<IActionResult> CreateAsync([FromBody] SlotDTO slotDTO)
         {

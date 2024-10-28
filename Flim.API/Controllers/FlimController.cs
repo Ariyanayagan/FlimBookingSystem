@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Flim.API.Controllers
 {
+    /// <summary>
+    /// This Controller has all film operation like fetch, add.
+    /// </summary>
     [Route("api/film")]
     [ApiController]
     [Authorize]
@@ -27,6 +30,11 @@ namespace Flim.API.Controllers
             _filmService = filmService;
         }
 
+        /// <summary>
+        /// Used to create film. Admin only has access
+        /// </summary>
+        /// <param name="filmDto"></param>
+        /// <returns></returns>
         [HttpPost("add")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateFilm([FromBody] AddFilmDTO filmDto)
@@ -47,6 +55,11 @@ namespace Flim.API.Controllers
 
         }
 
+        /// <summary>
+        /// You can fetch a film by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [HttpGet("flim-name")]
         public async Task<IActionResult> GetFlimByName([FromQuery] string name)
         {
@@ -67,6 +80,11 @@ namespace Flim.API.Controllers
             return Ok(ApiResponse<IEnumerable<ShowFilmRecord>>.Success(filmsDto, statusCode:(int)HttpStatusCode.OK));
         }
 
+        /// <summary>
+        /// You can fetch a film by genre
+        /// </summary>
+        /// <param name="genre"></param>
+        /// <returns></returns>
         [HttpGet("flim-genre")]
         public async Task<IActionResult> GetFlimByGenre([FromQuery] string genre)
         {
@@ -87,8 +105,12 @@ namespace Flim.API.Controllers
             return Ok(ApiResponse<IEnumerable<ShowFilmRecord>>.Success(filmsDto, statusCode: (int)HttpStatusCode.OK));
         }
 
-
-        [HttpGet("film-id/{id}")]
+        /// <summary>
+        /// You can fetxh film by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("film-id/{id:int}")]
         public async Task<IActionResult> GetFlimById([FromRoute] int id)
         {
             var film = await _filmService.GetFilmByIdAsync(id);
@@ -104,6 +126,10 @@ namespace Flim.API.Controllers
             return Ok(ApiResponse<ShowFilmRecord>.Success(result, statusCode: (int)HttpStatusCode.OK));
         }
 
+        /// <summary>
+        /// You can fetch all films
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("All")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -146,6 +172,10 @@ namespace Flim.API.Controllers
       
         }
 
+        /// <summary>
+        /// Track sales of films. Admin has only access.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("sales")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllSalesAsync()

@@ -14,6 +14,9 @@ using Flim.Application.Records;
 
 namespace Flim.API.Controllers
 {
+    /// <summary>
+    /// User action like login , register and order history.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -26,6 +29,11 @@ namespace Flim.API.Controllers
             _jwtService = jwtService;
         }
 
+        /// <summary>
+        /// User can login here
+        /// </summary>
+        /// <param name="userLogin"></param>
+        /// <returns> Auth token will be return each login. </returns>
         [HttpPost("login")]
         public async Task<IActionResult> login([FromBody] LoginModel userLogin)
         {
@@ -43,6 +51,11 @@ namespace Flim.API.Controllers
 
         }
 
+        /// <summary>
+        /// New user register Here
+        /// </summary>
+        /// <param name="registerModel"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
@@ -67,6 +80,10 @@ namespace Flim.API.Controllers
 
         }
 
+        /// <summary>
+        /// You can track your booking here!
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("my-bookings")]
         [Authorize]
         public async Task<IActionResult> GetBookingAsync()

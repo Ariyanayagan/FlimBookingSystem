@@ -8,9 +8,12 @@ using System.Net;
 
 namespace Flim.API.Controllers
 {
+    /// <summary>
+    /// Admin has only access to add seat for a film
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SeatController : ControllerBase
     {
         public readonly ISeatService seatService;
@@ -19,6 +22,11 @@ namespace Flim.API.Controllers
             this.seatService = seatService;
         }
 
+        /// <summary>
+        /// You can add seats for a film according to slot.
+        /// </summary>
+        /// <param name="seat"></param>
+        /// <returns></returns>
         [HttpPost("bulk-add")]
         public async Task<IActionResult> BulkAdd([FromBody] SeatDto seat)
         {
