@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Flim.Domain.Shared
 {
+    /// <summary>
+    /// Genric repository to all db sets.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IGenericRepository<T> where T : class
     {
         Task<IEnumerable<T>> GetAllAsync();

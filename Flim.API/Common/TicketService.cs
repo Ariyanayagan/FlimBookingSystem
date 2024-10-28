@@ -4,6 +4,10 @@ using Flim.Domain.Shared;
 
 namespace Flim.API.Common
 {
+    /// <summary>
+    /// A backround service which clean Hold tikets after 10 mins.
+    /// this service run each minute.
+    /// </summary>
     public class TicketService : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;

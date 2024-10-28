@@ -3,6 +3,9 @@ using Microsoft.OpenApi.Models;
 
 namespace Flim.API.Extensions
 {
+    /// <summary>
+    /// Extention method for swagger configuration for JWT Authorization.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         internal static IServiceCollection AddSwaggerGenWithAuth(this IServiceCollection services)

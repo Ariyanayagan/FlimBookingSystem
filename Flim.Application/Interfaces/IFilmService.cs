@@ -10,6 +10,9 @@ using Flim.Application.Records;
 
 namespace Flim.Application.Interfaces
 {
+    /// <summary>
+    /// Contract of film service
+    /// </summary>
     public interface IFilmService
     {
         Task<bool> CreateFilmAsync(AddFilmDTO filmDto);

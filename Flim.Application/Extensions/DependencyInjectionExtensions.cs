@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Flim.Application.Extensions
 {
+    /// <summary>
+    /// Extension method for inject services using dependency injection.
+    /// </summary>
     public static class DependencyInjectionExtensions
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)

@@ -3,6 +3,9 @@ using FluentValidation;
 
 namespace Flim.API.Validators
 {
+    /// <summary>
+    /// Validation for Add film using fluent Validation
+    /// </summary>
     public class AddFilmValidators : AbstractValidator<AddFilmDTO>
     {
         public AddFilmValidators()

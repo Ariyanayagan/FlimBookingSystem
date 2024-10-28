@@ -4,6 +4,9 @@ using Serilog;
 
 namespace Flim.API.Exceptions
 {
+    /// <summary>
+    /// Global Excebtion handler for internal server error.
+    /// </summary>
     public sealed class GlobalExceptionHandler : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)

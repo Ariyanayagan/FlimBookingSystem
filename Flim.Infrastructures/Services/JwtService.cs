@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace Flim.Infrastructures.Services
 {
+    /// <summary>
+    /// JWT Generate helper method here.
+    /// </summary>
     public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;

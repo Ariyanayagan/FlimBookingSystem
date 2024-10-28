@@ -16,6 +16,9 @@ using System.Transactions;
 
 namespace Flim.Infrastructures.Repositories
 {
+    /// <summary>
+    /// Implementation of UnitOfwork
+    /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
         private readonly BookingDbContext _context;

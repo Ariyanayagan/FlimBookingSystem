@@ -5,6 +5,9 @@ using Serilog;
 
 namespace Flim.API.Exceptions
 {
+    /// <summary>
+    /// Global Error handling here all badrequest captured and motified
+    /// </summary>
     public sealed class BadRequestExceptionHandler : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)

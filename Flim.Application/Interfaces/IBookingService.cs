@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Flim.Application.Interfaces
 {
+    /// <summary>
+    /// Contract of Booking service
+    /// </summary>
     public interface IBookingService
     {
         Task<List<FilmRecord>> GetAvailableSeats(int id , DateOnly date);

@@ -3,6 +3,9 @@ using FluentValidation;
 
 namespace Flim.API.Validators
 {
+    /// <summary>
+    /// Validation for Booking ticakets using fluet API Validation
+    /// </summary>
     public class BookingValidators:AbstractValidator<BookingDTO>
     {
         public BookingValidators()

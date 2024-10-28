@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Flim.Application.Interfaces
 {
+    /// <summary>
+    /// contract of user service.
+    /// </summary>
     public interface IUserService
     {
         Task<User> AuthenticateAsync(string username, string password);

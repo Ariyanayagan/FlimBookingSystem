@@ -3,6 +3,7 @@ using FluentValidation;
 
 namespace Flim.API.Validators
 {
+
     public class ConfirmBookingValidators : AbstractValidator<ConfirmBookingDTO>
     {
         public ConfirmBookingValidators()

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Flim.Domain.Interfaces
 {
+    /// <summary>
+    /// Extented Repostory to handle seat opearations.
+    /// </summary>
     public interface ISeatRepository : IGenericRepository<Seat>
     {
         Task AddSeat(SeatDto seatDto);

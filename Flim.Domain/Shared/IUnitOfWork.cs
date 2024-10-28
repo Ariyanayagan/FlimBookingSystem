@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Flim.Domain.Shared
 {
+    /// <summary>
+    /// Contract of Unitofwork.
+    /// </summary>
     public interface IUnitOfWork : IDisposable
     {
         ISeatRepository SeatRepository { get; }
