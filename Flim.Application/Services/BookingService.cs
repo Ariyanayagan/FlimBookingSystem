@@ -4,6 +4,7 @@ using Flim.Application.Records;
 using Flim.Domain.Entities;
 using Flim.Domain.Shared;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Security.Claims;
@@ -16,10 +17,13 @@ namespace Flim.Application.Services
         public readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor httpContextAccess;
 
-        public BookingService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext) 
+        private readonly IHubContext<SeatAvailabilityHub> _seatAvailabilityHub;
+
+        public BookingService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContext, IHubContext<SeatAvailabilityHub> seatAvailabilityHub)
         {
             _unitOfWork = unitOfWork;
             this.httpContextAccess = httpContext;
+            _seatAvailabilityHub = seatAvailabilityHub;
         }
         public async Task<List<FilmRecord>> GetAvailableSeats(int id, DateOnly date)
         {
@@ -112,10 +116,13 @@ namespace Flim.Application.Services
                     _unitOfWork.Repository<Seat>().UpdateRange(totalSeats);
                     await _unitOfWork.SaveAsync();
                     _unitOfWork.CommitTransaction();
+
+                    await _seatAvailabilityHub.Clients.All.SendAsync("ReceiveSeatUpdate", string.Join(",",booking.SeatNumbers), "Booked");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     await _unitOfWork.RollbackTransaction();
+                    await _seatAvailabilityHub.Clients.User(userId).SendAsync("ConcurrencyConflict", "Some of the seats have been reserved by another user.");
                     throw new Exception("Concurrency error: Another user has already reserved some of these seats.");
                 }
             }

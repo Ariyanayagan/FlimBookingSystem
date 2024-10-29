@@ -13,12 +13,15 @@ using Flim.API.Extensions;
 using FluentValidation;
 using Flim.API.Validators;
 using FluentValidation.AspNetCore;
+using Flim.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
+
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<BookingValidators>();
@@ -33,6 +36,18 @@ builder.Services.AddDbContext<BookingDbContext>(option=>option.UseNpgsql(connect
 
 builder.Services.AddInfrastructures();
 builder.Services.AddApplication();
+builder.Services.AddSignalR();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials()
+               .SetIsOriginAllowed((host) => true);
+    });
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
 
@@ -78,7 +93,6 @@ builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 
 
-builder.Services.AddProblemDetails();
 
 builder.Host.UseSerilog((context,configuration)=>
 configuration.ReadFrom.Configuration(context.Configuration));
@@ -92,14 +106,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
+
 app.UseHttpsRedirection();
+
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.UseExceptionHandler();
 
 app.MapControllers();
+
+app.MapHub<SeatAvailabilityHub>("/seatAvailabilityHub");
 
 app.Run();
